@@ -83,14 +83,26 @@ const targetLangNames = [
   "Turkish",
 ]
 
+const asyncqueue = []
+
 for (const targertLangName of targetLangNames) {
   const text = "Death like the cold of night, the life is like the day of spring. author of {{author}}, write at {{year}} and {{city}} "
 
-  const res = await translate(text, sourceLangName, targertLangName);
-  const checkRes = await checkTranslateQuality(res, text, targertLangName)
-  console.log(`target: ${targertLangName}`)
-  console.log(`answer: ${res}`)
-  console.log(`score: `, checkRes.score)
-  console.log(`better answer: ${checkRes.better_answer}`)
-  console.log("hh:mm:ss", new Date().getHours(), new Date().getMinutes(),  new Date().getSeconds())
+  asyncqueue.push(async function() {
+    const res = await translate(text, sourceLangName, targertLangName);
+    const checkRes = await checkTranslateQuality(res, text, targertLangName)
+    console.log(`
+      [${targertLangName}]
+      ${res}
+      
+      ${checkRes.score}/5
+
+      if_better_answer:
+      ${checkRes.better_answer}
+
+      time: ${new Date().toLocaleDateString()}
+    `)
+  })
 }
+
+await Promise.all(asyncqueue.map(f => f()))
