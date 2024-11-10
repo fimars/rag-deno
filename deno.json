@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "@langchain/core": "npm:@langchain/core@^0.3.17",
+    "@langchain/openai": "npm:@langchain/openai@^0.3.12",
+    "common-tags": "npm:common-tags@^1.8.2"
+  }
+}
